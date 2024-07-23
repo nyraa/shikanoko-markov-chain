@@ -1,0 +1,15 @@
+body
+{
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+footer
+{
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 10px;
+}

@@ -2,17 +2,18 @@
 import { useEffect, useRef, useState } from "react";
 import MarkovChain, { FSMState, FSMEdge } from "./components/MarkovChain";
 import YouTube from "react-youtube";
+import Footer from "./components/Footer";
 
 export default function Page()
 {
     const states: FSMState[] = [
-        new FSMState("shi", "し", 0.91, 1, 400, 300),
-        new FSMState("ka", "か", 1, 1.16, 550, 200),
-        new FSMState("no", "の", 1.16, 1.33, 700, 300),
-        new FSMState("ko", "こ", 1.33, 1.5, 550, 400),
-        new FSMState("ta", "た", 2.46, 2.66, 250, 400),
-        new FSMState("n", "ん", 2.66, 2.87, 100, 300),
-        new FSMState("empty", "", 3.08, 3.5, 250, 200)
+        new FSMState("shi", "し", 0.91, 1, 400, 200),
+        new FSMState("ka", "か", 1, 1.16, 550, 100),
+        new FSMState("no", "の", 1.16, 1.33, 700, 200),
+        new FSMState("ko", "こ", 1.33, 1.5, 550, 300),
+        new FSMState("ta", "た", 2.46, 2.66, 250, 300),
+        new FSMState("n", "ん", 2.66, 2.87, 100, 200),
+        new FSMState("empty", "", 3.08, 3.5, 250, 100)
     ];
 
     const links: FSMEdge[] = [
@@ -32,7 +33,7 @@ export default function Page()
 
     const YTRef = useRef<YouTube>(null);
     const options = {
-        height: "390",
+        height: "360",
         width: "640",
         playerVars: {
             autoplay: 0,
@@ -55,8 +56,10 @@ export default function Page()
 
     return (
         <>
-            <YouTube ref={YTRef} videoId="ZZvIVRQ4E7I" opts={options} onPlay={onPlay} onPause={onPause} />
+            <h1>Shikanoko but it's a Markov chain</h1>
+            <YouTube ref={YTRef} videoId="ZZvIVRQ4E7I" opts={options} onPlay={onPlay} onPause={onPause} className="player" />
             <MarkovChain states={states} links={links} setSeek={setCurrentTime} isRunning={playFlag} />
+            <Footer />
         </>
     );
 }
