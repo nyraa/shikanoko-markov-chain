@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "gh-pages -d out -t true --nojekyll"
   },
   "dependencies": {
     "d3": "^7.9.0",
+    "gh-pages": "^6.1.1",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
