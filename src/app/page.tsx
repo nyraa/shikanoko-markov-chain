@@ -12,7 +12,7 @@ export default function Page()
         new FSMState("ko", "こ", 1.33, 1.5, 550, 400),
         new FSMState("ta", "た", 2.46, 2.66, 250, 400),
         new FSMState("n", "ん", 2.66, 2.87, 100, 300),
-        new FSMState("empty", "", 3.08, 3.37, 250, 200)
+        new FSMState("empty", "", 3.08, 3.5, 250, 200)
     ];
 
     const links: FSMEdge[] = [
