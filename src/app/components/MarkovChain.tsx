@@ -40,7 +40,7 @@ export default function MarkovChain({
     states,
     links,
     width = 800,
-    height = 600,
+    height = 400,
     setSeek,
     isRunning
 } : {
@@ -84,6 +84,8 @@ export default function MarkovChain({
 
     const timeout = useRef<NodeJS.Timeout | null>(null);
     const transition = () => {
+        if(timeout.current)
+            clearTimeout(timeout.current);
         const next = getNextState(currentStateRef.current) ?? states[3];
         // console.log(`curr: ${currentStateRef.current.id}, next: ${next.id}`);
         d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", false);
@@ -157,7 +159,16 @@ export default function MarkovChain({
             .attr("class", "node")
             .attr("r", 20)
             .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+            .attr("cy", d => d.y)
+            .on("click", (event, d) => {
+                if(timeout.current)
+                    clearTimeout(timeout.current);
+                d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", false);
+                currentStateRef.current = d;
+                d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", true);
+                setSeek(currentStateRef.current.start);
+                timeout.current = setTimeout(transition, currentStateRef.current.duration * 1000);
+            });
         
         const label = svg.append("g")
             .attr("class", "labels")
