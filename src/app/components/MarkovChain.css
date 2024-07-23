@@ -1,10 +1,16 @@
+/* edge */
 .edges
 {
     stroke: #7d7d7d;
     stroke-width: 2px;
     fill: none;
 }
+.edge-labels
+{
+    user-select: none;
+}
 
+/* node */
 .nodes
 {
     stroke: none;
