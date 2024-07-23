@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, use } from "react";
 import * as d3 from "d3";
 import "./MarkovChain.css";
 
@@ -41,13 +41,15 @@ export default function MarkovChain({
     links,
     width = 800,
     height = 600,
-    setSeek
+    setSeek,
+    isRunning
 } : {
     states: FSMState[],
     links: FSMEdge[],
     width?: number,
     height?: number,
-    setSeek: (time: number) => void
+    setSeek: (time: number) => void,
+    isRunning: boolean
 })
 {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -67,19 +69,31 @@ export default function MarkovChain({
         return `M${x} ${y} C${x + d} ${y + d}, ${x - d} ${y + d}, ${x} ${y}`;
     }
 
-    useEffect(() => {
-        const getNextState = (currentState: FSMState) => {
-            const next = links.filter(link => link.source === currentState.id);
-            const random = Math.random();
-            let sum = 0;
-            for (let i = 0; i < next.length; i++) {
-                sum += next[i].probability;
-                if (random < sum) {
-                    return states.find(state => state.id === next[i].target);
-                }
+    const getNextState = (currentState: FSMState) => {
+        const next = links.filter(link => link.source === currentState.id);
+        const random = Math.random();
+        let sum = 0;
+        for (let i = 0; i < next.length; i++) {
+            sum += next[i].probability;
+            if (random < sum) {
+                return states.find(state => state.id === next[i].target);
             }
-            return currentState;
-        };
+        }
+        return currentState;
+    };
+
+    const timeout = useRef<NodeJS.Timeout | null>(null);
+    const transition = () => {
+        const next = getNextState(currentStateRef.current) ?? states[3];
+        // console.log(`curr: ${currentStateRef.current.id}, next: ${next.id}`);
+        d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", false);
+        d3.select(`#node_${next.id}`).classed("current-node", true);
+        currentStateRef.current = next;
+        setSeek(currentStateRef.current.start);
+        timeout.current = setTimeout(transition, currentStateRef.current.duration * 1000);
+    }
+
+    useEffect(() => {
         const svg = d3.select(svgRef.current)
             .attr("width", width)
             .attr("height", height);
@@ -157,17 +171,21 @@ export default function MarkovChain({
         
         d3.select(`#node_shi`).classed("current-node", true);
 
-        const transition = () => {
-            const next = getNextState(currentStateRef.current) ?? states[3];
-            // console.log(`curr: ${currentStateRef.current.id}, next: ${next.id}`);
-            d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", false);
-            d3.select(`#node_${next.id}`).classed("current-node", true);
-            currentStateRef.current = next;
-            setSeek(currentStateRef.current.start);
+        timeout.current = setTimeout(transition, currentStateRef.current.duration * 1000);
+    }, []);
+
+    useEffect(() => {
+        if(isRunning)
+            {
             setTimeout(transition, currentStateRef.current.duration * 1000);
         }
-        setTimeout(transition, currentStateRef.current.duration * 1000);
-    }, []);
+        else
+        {
+            if(timeout.current)
+                clearTimeout(timeout.current);
+        }
+    }
+    , [isRunning]);
 
     return <svg ref={svgRef}></svg>;
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import MarkovChain, { FSMState, FSMEdge } from "./components/MarkovChain";
 import YouTube from "react-youtube";
 
@@ -35,10 +35,18 @@ export default function Page()
         height: "390",
         width: "640",
         playerVars: {
-            autoplay: 1,
+            autoplay: 0,
             controls: 0
         },
     };
+
+    const [playFlag, setPlayFlag] = useState<boolean>(false);
+    const onPlay = () => {
+        setPlayFlag(true);
+    }
+    const onPause = () => {
+        setPlayFlag(false);
+    }
 
     const setCurrentTime = (time: number) => {
         if(!YTRef.current) return;
@@ -47,8 +55,8 @@ export default function Page()
 
     return (
         <>
-            <YouTube ref={YTRef} videoId="ZZvIVRQ4E7I" opts={options} />
-            <MarkovChain states={states} links={links} setSeek={setCurrentTime} />
+            <YouTube ref={YTRef} videoId="ZZvIVRQ4E7I" opts={options} onPlay={onPlay} onPause={onPause} />
+            <MarkovChain states={states} links={links} setSeek={setCurrentTime} isRunning={playFlag} />
         </>
     );
 }
