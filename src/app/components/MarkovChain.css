@@ -4,11 +4,18 @@
     stroke-width: 2px;
     fill: none;
 }
+
 .nodes
 {
     stroke: none;
     fill: #a9a9a9;
 }
+
+.node
+{
+    cursor: pointer;
+}
+
 .node.current-node
 {
     fill: #cfcf67;
