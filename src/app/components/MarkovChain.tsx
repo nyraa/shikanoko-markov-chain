@@ -40,12 +40,14 @@ export default function MarkovChain({
     states,
     links,
     width = 800,
-    height = 600
+    height = 600,
+    setSeek
 } : {
     states: FSMState[],
     links: FSMEdge[],
     width?: number,
-    height?: number
+    height?: number,
+    setSeek: (time: number) => void
 })
 {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -157,10 +159,11 @@ export default function MarkovChain({
 
         const transition = () => {
             const next = getNextState(currentStateRef.current) ?? states[3];
-            console.log(`curr: ${currentStateRef.current.id}, next: ${next.id}`);
+            // console.log(`curr: ${currentStateRef.current.id}, next: ${next.id}`);
             d3.select(`#node_${currentStateRef.current.id}`).classed("current-node", false);
             d3.select(`#node_${next.id}`).classed("current-node", true);
             currentStateRef.current = next;
+            setSeek(currentStateRef.current.start);
             setTimeout(transition, currentStateRef.current.duration * 1000);
         }
         setTimeout(transition, currentStateRef.current.duration * 1000);
