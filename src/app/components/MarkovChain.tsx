@@ -100,6 +100,7 @@ export default function MarkovChain({
             .attr("width", width)
             .attr("height", height);
 
+        // marker for arrowhead
         svg.append("defs").append("marker")
             .attr("id", "arrowhead")
             .attr("viewBox", "-0 -5 10 10")
@@ -114,6 +115,7 @@ export default function MarkovChain({
             .attr("fill", "#999")
             .style("stroke", "none");
         
+        // edges
         const edge = svg.append("g")
             .attr("class", "edges")
             .selectAll("path")
@@ -131,6 +133,7 @@ export default function MarkovChain({
                 return drawQuadraticCurve(source.x, source.y, target.x, target.y);
             });
         
+        // probability labels
         const edgeLabel = svg.append("g")
             .attr("class", "edge-labels")
             .selectAll("text")
@@ -146,10 +149,31 @@ export default function MarkovChain({
                 const source = states.find(state => state.id === d.source);
                 const target = states.find(state => state.id === d.target);
                 if(!source || !target) return 0;
-                return (source.y + target.y) / 2;
+                let dy = 0;
+                if(source.x === target.x && source.y === target.y)
+                {
+                    if(source.y > height / 2)
+                    {
+                        dy = 90;
+                    }
+                    else
+                    {
+                        dy = -90;
+                    }
+                }
+                else if(source.x > target.x)
+                {
+                    dy = 45;
+                }
+                else
+                {
+                    dy = -45;
+                }
+                return (source.y + target.y) / 2 + dy;
             })
             .text(d => d.probability)
 
+        // states
         const node = svg.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
@@ -170,6 +194,7 @@ export default function MarkovChain({
                 timeout.current = setTimeout(transition, currentStateRef.current.duration * 1000);
             });
         
+        // state labels
         const label = svg.append("g")
             .attr("class", "labels")
             .selectAll("text")
