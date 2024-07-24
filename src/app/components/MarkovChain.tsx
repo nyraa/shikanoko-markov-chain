@@ -212,7 +212,7 @@ export default function MarkovChain({
 
     useEffect(() => {
         if(isRunning)
-            {
+        {
             setTimeout(transition, currentStateRef.current.duration * 1000);
         }
         else
@@ -220,8 +220,7 @@ export default function MarkovChain({
             if(timeout.current)
                 clearTimeout(timeout.current);
         }
-    }
-    , [isRunning]);
+    }, [isRunning]);
 
     return <svg ref={svgRef}></svg>;
 }
