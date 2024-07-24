@@ -14,3 +14,6 @@ pnpm dev
 # or
 bun dev
 ```
+
+## References
+- [Markov chain in D3](https://github.com/matheusportela/markov-chain)
