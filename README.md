@@ -1,7 +1,8 @@
 # Shikanoko but it's a Markov chain
 Demo at [here](https://nyraa.github.io/shikanoko-markov-chain/)
 
-This idea was inspired by this video:  [![thumbnail](https://img.youtube.com/vi/Xkq13ZthmA0/0.jpg)](https://youtu.be/Xkq13ZthmA0)
+This idea was inspired by this video:  
+[![thumbnail](https://img.youtube.com/vi/Xkq13ZthmA0/0.jpg)](https://youtu.be/Xkq13ZthmA0)
 
 ## To run
 ```
